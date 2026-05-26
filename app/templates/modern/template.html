@@ -3,239 +3,234 @@
 <head>
   <meta charset="UTF-8">
   <style>
-    @page {
-      size: A4;
+    /* Configuración de Página e Impresión */
+    @page { 
+      size: A4; 
+      margin-top: 16mm;
+      margin-bottom: 16mm;
+      margin-left: 0;
+      margin-right: 0; 
+    }
+    @page :first {
       margin: 0;
     }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+    body { 
+      font-family: Arial, sans-serif; 
+      font-size: 10.5pt; 
+      color: #1a1a1a; 
+      background: white; 
+      line-height: var(--line-height);
+    }
+    
+    .page { 
+      width: 210mm; 
+      min-height: 297mm; 
+      padding: 0; 
     }
 
-    body {
-      font-family: Arial, sans-serif;
-      font-size: 10.5pt;
-      color: #1a1a1a;
-      background: white;
-      line-height: 1.4;
+    /* Cabecera / Header */
+    .header { 
+      background-color: #1e3a5f; 
+      padding: 20mm 16mm 14mm 16mm; 
+    }
+    .nombre { 
+      font-size: 22pt; 
+      font-weight: bold; 
+      color: #ffffff; 
+      letter-spacing: 0.5pt; 
+      line-height: 1.2; 
+    }
+    .titulo { 
+      font-size: 12pt; 
+      color: #93c5fd; 
+      margin-top: 3pt; 
+      font-weight: normal; 
+    }
+    .separador-header { 
+      border: none; 
+      border-top: 1pt solid #3b82f6; 
+      margin: 8pt 0; 
+    }
+    
+    /* Tabla de Contacto */
+    .contacto-tabla { 
+      width: 100%; 
+      border-collapse: collapse; 
+      table-layout: auto; 
+    }
+    .contacto-tabla td { 
+      font-size: 9pt; 
+      color: #cbd5e1; 
+      padding: 1pt 8pt 1pt 0; 
+      vertical-align: middle; 
+      white-space: nowrap; 
+    }
+    .contacto-label { 
+      font-weight: bold; 
+      color: #93c5fd; 
+      padding-right: 4pt; 
+    }
+    
+    /* Foto de Perfil */
+    .foto-contenedor { 
+      float: right; 
+      margin: -60pt 0 8pt 16pt; 
+    }
+    .foto-contenedor img { 
+      width: 72pt; 
+      height: 72pt; 
+      border-radius: 50%; 
+      border: 3pt solid #ffffff; 
+      object-fit: cover; 
+    }
+    .clearfix::after { 
+      content: ""; 
+      display: table; 
+      clear: both; 
     }
 
-    .page {
-      width: 210mm;
-      min-height: 297mm;
-      padding: 0;
+    /* Estructura del Cuerpo y Secciones (Control de saltos) */
+    .cuerpo { 
+      padding: var(--cuerpo-padding);
     }
-
-    /* ── CABECERA ── */
-    .header {
-      background-color: #1e3a5f;
-      padding: 20mm 16mm 14mm 16mm;
-    }
-
-    .header-top {
-      margin-bottom: 8pt;
-    }
-
-    .nombre {
-      font-size: 22pt;
-      font-weight: bold;
-      color: #ffffff;
-      letter-spacing: 0.5pt;
-      line-height: 1.2;
-    }
-
-    .titulo {
-      font-size: 12pt;
-      color: #93c5fd;
-      margin-top: 3pt;
-      font-weight: normal;
-    }
-
-    .separador-header {
-      border: none;
-      border-top: 1pt solid #3b82f6;
-      margin: 8pt 0;
-    }
-
-    .contacto-tabla {
+    
+    .seccion { 
+      margin-bottom: var(--seccion-margin);
+      display: block;
       width: 100%;
-      border-collapse: collapse;
-      table-layout: auto;
-    }
-
-    .contacto-tabla td {
-      font-size: 9pt;
-      color: #cbd5e1;
-      padding: 1pt 12pt 1pt 0;
-      vertical-align: middle;
-      white-space: nowrap;
-    }
-
-    .contacto-label {
-      font-weight: bold;
-      color: #93c5fd;
-      width: 1%;
-      padding-right: 4pt;
-    }
-
-    /* ── CUERPO ── */
-    .cuerpo {
-      padding: 12mm 16mm;
-    }
-
-    /* ── FOTO ── */
-    .foto-contenedor {
-      float: right;
-      margin: -60pt 0 8pt 16pt;
-    }
-
-    .foto-contenedor img {
-      width: 72pt;
-      height: 72pt;
-      border-radius: 50%;
-      border: 3pt solid #ffffff;
-      object-fit: cover;
-    }
-
-    .clearfix::after {
-      content: "";
-      display: table;
       clear: both;
+      break-inside: avoid; /* Evita que la sección se corte entre páginas */
+    }
+    
+    .seccion-titulo { 
+      font-size: 9pt; 
+      font-weight: bold; 
+      text-transform: uppercase; 
+      letter-spacing: 1.2pt; 
+      color: #1e3a5f; 
+      border-bottom: 1.5pt solid #1e3a5f; 
+      padding-bottom: 3pt; 
+      margin-bottom: 8pt; 
+      break-after: avoid; 
+    }
+    
+    .resumen-texto { 
+      font-size: var(--resumen-size);
+      color: #374151; 
+      line-height: var(--line-height);
+      text-align: justify; 
     }
 
-    /* ── SECCIONES ── */
-    .seccion {
-      margin-bottom: 14pt;
+    /* Bloques de Experiencia / Proyectos */
+    .item { 
+      margin-bottom: var(--item-margin);
+      break-inside: avoid; 
     }
-
-    .seccion-titulo {
-      font-size: 9pt;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 1.2pt;
-      color: #1e3a5f;
-      border-bottom: 1.5pt solid #1e3a5f;
-      padding-bottom: 3pt;
-      margin-bottom: 8pt;
-    }
-
-    /* ── RESUMEN ── */
-    .resumen-texto {
-      font-size: 10pt;
-      color: #374151;
-      line-height: 1.6;
-      text-align: justify;
-    }
-
-    /* ── EXPERIENCIA Y EDUCACIÓN ── */
-    .item {
-      margin-bottom: 9pt;
-    }
-
-    .item-tabla {
-      width: 100%;
-      border-collapse: collapse;
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
       margin-bottom: 1pt;
     }
-
-    .item-tabla td {
-      vertical-align: top;
-      padding: 0;
+    .item-titulo { 
+      font-size: 10.5pt; 
+      font-weight: bold; 
+      color: #1a1a1a; 
+      flex: 1;
     }
-
-    .item-titulo {
-      font-size: 10.5pt;
-      font-weight: bold;
-      color: #1a1a1a;
+    .item-fecha { 
+      font-size: 9pt; 
+      color: #64748b; 
+      text-align: right; 
+      white-space: nowrap; 
+      margin-left: 10pt;
     }
-
-    .item-fecha {
-      font-size: 9pt;
-      color: #64748b;
-      text-align: right;
+    .item-subtitulo { 
+      font-size: 10pt; 
+      color: #2563eb; 
+      margin-top: 1pt; 
+    }
+    .item-descripcion { 
+      font-size: 9.5pt; 
+      color: #4b5563; 
+      margin-top: 3pt; 
+      line-height: 1.5; 
+    }
+    
+    /* Tecnologías y Etiquetas */
+    .tech-tag { 
+      background: #eff6ff; 
+      color: #1d4ed8; 
+      border: 0.5pt solid #bfdbfe; 
+      border-radius: 2pt; 
+      padding: 1pt 6pt; 
+      font-size: 8.5pt; 
+      margin-right: 3pt; 
+      margin-top: 2pt;
+      display: inline-block;
+    }
+    
+    /* Maquetación Optimizada de Habilidades (Flexbox real) */
+    .habilidades-contenedor {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5pt; 
+      width: 100%;
+    }
+    .habilidad-item { 
+      background: #eff6ff; 
+      color: #1d4ed8; 
+      border: 0.5pt solid #bfdbfe; 
+      border-radius: 2pt; 
+      padding: 3pt 8pt; 
+      font-size: 9.5pt; 
+      display: inline-block; 
       white-space: nowrap;
-      width: 1%;
     }
-
-    .item-subtitulo {
-      font-size: 10pt;
-      color: #2563eb;
-      margin-top: 1pt;
+    
+    /* Idiomas Gird/Flex simplificado */
+    .idiomas-contenedor {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10pt 0;
     }
-
-    .item-descripcion {
-      font-size: 9.5pt;
-      color: #4b5563;
-      margin-top: 3pt;
-      line-height: 1.5;
-    }
-
-    /* ── HABILIDADES ── */
-    .habilidades-tabla {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .habilidades-tabla td {
-      padding: 2pt 6pt 2pt 0;
-      font-size: 10pt;
-      vertical-align: top;
-      width: 25%;
-    }
-
-    .habilidad-item {
-      background: #eff6ff;
-      color: #1d4ed8;
-      border: 0.5pt solid #bfdbfe;
-      border-radius: 2pt;
-      padding: 2pt 8pt;
-      font-size: 9.5pt;
-      display: block;
-      text-align: center;
-    }
-
-    /* ── IDIOMAS ── */
-    .idiomas-tabla {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .idiomas-tabla td {
-      padding: 2pt 0;
-      font-size: 10pt;
+    .idioma-item {
       width: 50%;
-      vertical-align: top;
+      font-size: 10pt;
     }
-
-    .idioma-nombre {
-      font-weight: bold;
-      color: #1a1a1a;
+    .idioma-nombre { 
+      font-weight: bold; 
+      color: #1a1a1a; 
     }
-
-    .idioma-nivel {
-      color: #64748b;
+    .idioma-nivel { 
+      color: #64748b; 
     }
-
-    .idioma-separador {
-      color: #94a3b8;
-      padding: 0 4pt;
+    .idioma-separador { 
+      color: #94a3b8; 
+      padding: 0 4pt; 
     }
-
   </style>
 </head>
-<body>
+<body style="
+  --line-height: {{ density.line_height }};
+  --cuerpo-padding: {{ density.cuerpo_padding }};
+  --seccion-margin: {{ density.seccion_margin }};
+  --item-margin: {{ density.item_margin }};
+  --resumen-size: {{ density.resumen_size }};
+">
 <div class="page">
 
-  <!-- CABECERA -->
   <div class="header">
-    <div class="header-top">
-      <div class="nombre">{{ cv.nombre }} {{ cv.apellidos }}</div>
-      {% if cv.titulo_profesional %}
-        <div class="titulo">{{ cv.titulo_profesional }}</div>
-      {% endif %}
-    </div>
+    <div class="nombre">{{ cv.nombre }} {{ cv.apellidos }}</div>
+    {% if cv.titulo_profesional %}
+      <div class="titulo">{{ cv.titulo_profesional }}</div>
+    {% endif %}
 
     <hr class="separador-header">
 
@@ -244,34 +239,31 @@
         <td><span class="contacto-label">Email</span> {{ cv.email }}</td>
         <td><span class="contacto-label">Tel.</span> {{ cv.telefono }}</td>
         <td><span class="contacto-label">Ciudad</span> {{ cv.ciudad }}</td>
-    </tr>
-    {% if cv.linkedin or cv.github or cv.web %}
-    <tr>
-      {% if cv.linkedin %}
-        <td><span class="contacto-label">LinkedIn</span> {{ cv.linkedin }}</td>
+      </tr>
+      {% if cv.linkedin or cv.github or cv.web %}
+      <tr>
+        {% if cv.linkedin %}
+          <td><span class="contacto-label">LinkedIn</span> {{ cv.linkedin }}</td>
+        {% endif %}
+        {% if cv.github %}
+          <td><span class="contacto-label">GitHub</span> {{ cv.github }}</td>
+        {% endif %}
+        {% if cv.web %}
+          <td><span class="contacto-label">Web</span> {{ cv.web }}</td>
+        {% endif %}
+      </tr>
       {% endif %}
-      {% if cv.github %}
-        <td><span class="contacto-label">GitHub</span> {{ cv.github }}</td>
-      {% endif %}
-      {% if cv.web %}
-        <td><span class="contacto-label">Web</span> {{ cv.web }}</td>
-      {% endif %}
-    </tr>
-    {% endif %}
-  </table>
+    </table>
   </div>
 
-  <!-- CUERPO -->
   <div class="cuerpo clearfix">
 
-    <!-- FOTO -->
     {% if cv.foto_url %}
     <div class="foto-contenedor">
       <img src="{{ cv.foto_url }}" alt="Foto de perfil">
     </div>
     {% endif %}
 
-    <!-- RESUMEN -->
     {% if cv.resumen %}
     <div class="seccion">
       <div class="seccion-titulo">Perfil profesional</div>
@@ -279,21 +271,56 @@
     </div>
     {% endif %}
 
-    <!-- EXPERIENCIA -->
-    {% if cv.experiencias %}
+    {% if proyectos %}
+    <div class="seccion">
+      <div class="seccion-titulo">Proyectos</div>
+      {% for proyecto in proyectos %}
+      <div class="item">
+        <div class="item-header">
+          <span class="item-titulo">
+            {% if proyecto.url %}
+              <a href="{{ proyecto.url }}" style="color: #1a1a1a; text-decoration: none;">
+                {{ proyecto.nombre or 'Proyecto' }}
+              </a>
+            {% else %}
+              {{ proyecto.nombre or 'Proyecto' }}
+            {% endif %}
+          </span>
+          {% if proyecto.url %}
+          <span class="item-fecha">
+            <a href="{{ proyecto.url }}" style="color: #2563eb; font-size: 9pt; text-decoration: none;">Ver proyecto</a>
+          </span>
+          {% endif %}
+        </div>
+        
+        {% if proyecto.tecnologias %}
+        <div style="margin-top: 2pt; margin-bottom: 4pt;">
+          {% for tech in proyecto.tecnologias.split(',') %}
+            <span class="tech-tag">{{ tech.strip() }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% if proyecto.descripcion %}
+          <div class="item-descripcion">{{ proyecto.descripcion }}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if experiencias %}
     <div class="seccion">
       <div class="seccion-titulo">Experiencia profesional</div>
-      {% for exp in cv.experiencias %}
+      {% for exp in experiencias %}
       <div class="item">
-        <table class="item-tabla">
-          <tr>
-            <td class="item-titulo">{{ exp.cargo }}</td>
-            <td class="item-fecha">
-              {{ exp.fecha_inicio.strftime('%m/%Y') }} —
-              {% if exp.fecha_fin %}{{ exp.fecha_fin.strftime('%m/%Y') }}{% else %}Actualidad{% endif %}
-            </td>
-          </tr>
-        </table>
+        <div class="item-header">
+          <span class="item-titulo">{{ exp.cargo }}</span>
+          <span class="item-fecha">
+            {{ exp.fecha_inicio.strftime('%m/%Y') }} —
+            {% if exp.fecha_fin %}{{ exp.fecha_fin.strftime('%m/%Y') }}{% else %}Actualidad{% endif %}
+          </span>
+        </div>
         <div class="item-subtitulo">{{ exp.empresa }}</div>
         {% if exp.descripcion %}
           <div class="item-descripcion">{{ exp.descripcion }}</div>
@@ -303,21 +330,18 @@
     </div>
     {% endif %}
 
-    <!-- EDUCACIÓN -->
-    {% if cv.educaciones %}
+    {% if educaciones %}
     <div class="seccion">
       <div class="seccion-titulo">Educación</div>
-      {% for edu in cv.educaciones %}
+      {% for edu in educaciones %}
       <div class="item">
-        <table class="item-tabla">
-          <tr>
-            <td class="item-titulo">{{ edu.titulo }}</td>
-            <td class="item-fecha">
-              {{ edu.fecha_inicio.strftime('%m/%Y') }} —
-              {% if edu.fecha_fin %}{{ edu.fecha_fin.strftime('%m/%Y') }}{% else %}Actualidad{% endif %}
-            </td>
-          </tr>
-        </table>
+        <div class="item-header">
+          <span class="item-titulo">{{ edu.titulo }}</span>
+          <span class="item-fecha">
+            {{ edu.fecha_inicio.strftime('%m/%Y') }} —
+            {% if edu.fecha_fin %}{{ edu.fecha_fin.strftime('%m/%Y') }}{% else %}Actualidad{% endif %}
+          </span>
+        </div>
         <div class="item-subtitulo">{{ edu.institucion }}</div>
         {% if edu.descripcion %}
           <div class="item-descripcion">{{ edu.descripcion }}</div>
@@ -327,47 +351,29 @@
     </div>
     {% endif %}
 
-    <!-- HABILIDADES -->
-    {% if cv.habilidades %}
+    {% if habilidades %}
     <div class="seccion">
       <div class="seccion-titulo">Habilidades</div>
-      <table class="habilidades-tabla">
-        <tr>
-          {% for skill in cv.habilidades %}
-            <td><span class="habilidad-item">{{ skill.nombre }}</span></td>
-            {% if loop.index % 4 == 0 and not loop.last %}
-              </tr><tr>
-            {% endif %}
-          {% endfor %}
-          {% set resto = cv.habilidades|length % 4 %}
-          {% if resto != 0 %}
-            {% for i in range(4 - resto) %}
-              <td></td>
-            {% endfor %}
-          {% endif %}
-        </tr>
-      </table>
+      <div class="habilidades-contenedor">
+        {% for skill in habilidades %}
+          <span class="habilidad-item">{{ skill.nombre }}</span>
+        {% endfor %}
+      </div>
     </div>
     {% endif %}
 
-    <!-- IDIOMAS -->
-    {% if cv.idiomas %}
+    {% if idiomas %}
     <div class="seccion">
       <div class="seccion-titulo">Idiomas</div>
-      <table class="idiomas-tabla">
-        <tr>
-          {% for lang in cv.idiomas %}
-            <td>
-              <span class="idioma-nombre">{{ lang.idioma }}</span>
-              <span class="idioma-separador">—</span>
-              <span class="idioma-nivel">{{ lang.nivel }}</span>
-            </td>
-            {% if loop.index % 2 == 0 and not loop.last %}
-              </tr><tr>
-            {% endif %}
-          {% endfor %}
-        </tr>
-      </table>
+      <div class="idiomas-contenedor">
+        {% for lang in idiomas %}
+          <div class="idioma-item">
+            <span class="idioma-nombre">{{ lang.idioma }}</span>
+            <span class="idioma-separador">—</span>
+            <span class="idioma-nivel">{{ lang.nivel }}</span>
+          </div>
+        {% endfor %}
+      </div>
     </div>
     {% endif %}
 

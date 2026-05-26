@@ -22,6 +22,7 @@ function CVForm() {
     foto_url: '',
     titulo_profesional: '',
     resumen: '',
+    proyectos: [],
     experiencias: [],
     educaciones: [],
     habilidades: [],
@@ -56,6 +57,31 @@ function CVForm() {
   const handleField = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
+
+
+  // --- PROYECTOS ---
+const addProyecto = () => {
+  setFormData(prev => ({
+    ...prev,
+    proyectos: [...prev.proyectos, {
+      nombre: '', descripcion: '', tecnologias: '', url: ''
+    }]
+  }))
+}
+
+const updateProyecto = (index, field, value) => {
+  const updated = [...formData.proyectos]
+  updated[index][field] = value
+  setFormData(prev => ({ ...prev, proyectos: updated }))
+}
+
+const removeProyecto = (index) => {
+  setFormData(prev => ({
+    ...prev,
+    proyectos: prev.proyectos.filter((_, i) => i !== index)
+  }))
+}
+
 
   // --- EXPERIENCIAS ---
   const addExperiencia = () => {
@@ -161,6 +187,14 @@ function CVForm() {
     foto_url: formData.foto_url || null,
     titulo_profesional: formData.titulo_profesional || null,
     resumen: formData.resumen || null,
+    proyectos: formData.proyectos.filter(p => p.nombre || p.descripcion || p.url)
+    .map(p => ({
+    ...p,
+    nombre: p.nombre || null,
+    descripcion: p.descripcion || null,
+    tecnologias: p.tecnologias || null,
+    url: p.url || null
+    })),
     experiencias: formData.experiencias
         .filter(e => e.empresa && e.cargo && e.fecha_inicio)
         .map(e => ({ ...e, fecha_fin: cleanFecha(e.fecha_fin), descripcion: e.descripcion || null })),
@@ -276,6 +310,55 @@ function CVForm() {
                 rows={4} />
             </div>
           </div>
+
+          {/* PROYECTOS */}
+<div style={styles.section}>
+  <div style={styles.sectionHeader}>
+    <h3 style={styles.sectionTitle}>Proyectos destacados</h3>
+    <button type="button" style={styles.buttonAdd} onClick={addProyecto}>
+      + Añadir
+    </button>
+  </div>
+  <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '12px', marginTop: '-8px' }}>
+    Opcional — proyectos personales, académicos o profesionales que quieras destacar
+  </p>
+  {formData.proyectos.map((proyecto, i) => (
+    <div key={i} style={styles.itemCard}>
+      <div style={styles.itemCardHeader}>
+        <span style={styles.itemCardTitle}>Proyecto {i + 1}</span>
+        <button type="button" style={styles.buttonRemove}
+          onClick={() => removeProyecto(i)}>✕</button>
+      </div>
+      <div style={styles.grid2}>
+        <div style={styles.field}>
+          <label style={styles.label}>Nombre del proyecto</label>
+          <input style={styles.input} value={proyecto.nombre}
+            onChange={e => updateProyecto(i, 'nombre', e.target.value)}
+            placeholder="Ej: CV Generator" />
+        </div>
+        <div style={styles.field}>
+          <label style={styles.label}>URL (opcional)</label>
+          <input style={styles.input} value={proyecto.url}
+            onChange={e => updateProyecto(i, 'url', e.target.value)}
+            placeholder="https://github.com/..." />
+        </div>
+        <div style={styles.field}>
+          <label style={styles.label}>Tecnologías (separadas por comas)</label>
+          <input style={styles.input} value={proyecto.tecnologias}
+            onChange={e => updateProyecto(i, 'tecnologias', e.target.value)}
+            placeholder="Ej: Python, FastAPI, React" />
+        </div>
+        <div style={{ ...styles.field, gridColumn: 'span 2' }}>
+          <label style={styles.label}>Descripción (opcional)</label>
+          <textarea style={styles.textarea} value={proyecto.descripcion}
+            onChange={e => updateProyecto(i, 'descripcion', e.target.value)}
+            placeholder="Breve descripción del proyecto..."
+            rows={3} />
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
 
           {/* EXPERIENCIA */}
           <div style={styles.section}>

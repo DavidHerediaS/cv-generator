@@ -59,6 +59,21 @@ class LanguageResponse(LanguageBase):
     model_config = {"from_attributes": True}
 
 
+# --- PROYECTO ---
+class ProjectBase(BaseModel):
+    nombre: str | None = None
+    descripcion: str | None = None
+    tecnologias: str | None = None
+    url: str | None = None
+
+class ProjectCreate(ProjectBase):
+    pass
+
+class ProjectResponse(ProjectBase):
+    id: int
+    model_config = {"from_attributes": True}
+
+
 # --- CV ---
 class CVCreate(BaseModel):
     nombre: str
@@ -72,6 +87,7 @@ class CVCreate(BaseModel):
     foto_url: str | None = None
     titulo_profesional: str | None = None
     resumen: str | None = None
+    proyectos: list[ProjectCreate] = []
     experiencias: list[ExperienceCreate] = []
     educaciones: list[EducationCreate] = []
     habilidades: list[SkillCreate] = []
@@ -90,6 +106,7 @@ class CVUpdate(BaseModel):
     foto_url: str | None = None
     titulo_profesional: str | None = None
     resumen: str | None = None
+    proyectos: list[ProjectCreate] | None = None
     experiencias: list[ExperienceCreate] | None = None
     educaciones: list[EducationCreate] | None = None
     habilidades: list[SkillCreate] | None = None
@@ -110,6 +127,7 @@ class CVResponse(BaseModel):
     foto_url: str | None = None
     titulo_profesional: str | None = None
     resumen: str | None = None
+    proyectos: list[ProjectResponse] = []
     experiencias: list[ExperienceResponse] = []
     educaciones: list[EducationResponse] = []
     habilidades: list[SkillResponse] = []

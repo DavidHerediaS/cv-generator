@@ -1,6 +1,6 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
-from app.database.models.cv import CV, CVExperience, CVEducation, CVSkill, CVLanguage
+from app.database.models.cv import CV, CVExperience, CVEducation, CVSkill, CVLanguage, CVProject
 from app.database.schemas.cv import CVCreate, CVUpdate
 from app.core.encryption import encrypt, decrypt
 
@@ -21,13 +21,15 @@ def _decrypt_cv(cv: CV) -> CV:
 
 
 def create_cv(db: Session, user_id: int, data: CVCreate) -> CV:
-    fields = data.model_dump(exclude={"experiencias", "educaciones", "habilidades", "idiomas"})
+    fields = data.model_dump(exclude={"experiencias", "educaciones", "habilidades", "idiomas", "proyectos"})
     fields = _encrypt_cv_fields(fields)
 
     cv = CV(user_id=user_id, **fields)
     db.add(cv)
     db.flush()
 
+    for proyecto in data.proyectos:
+        db.add(CVProject(cv_id=cv.id, **proyecto.model_dump()))
     for exp in data.experiencias:
         db.add(CVExperience(cv_id=cv.id, **exp.model_dump()))
 
@@ -46,7 +48,13 @@ def create_cv(db: Session, user_id: int, data: CVCreate) -> CV:
 
 
 def get_cv(db: Session, cv_id: int, user_id: int) -> CV | None:
-    cv = db.query(CV).filter(CV.id == cv_id, CV.user_id == user_id).first()
+    cv = db.query(CV).options(
+        joinedload(CV.experiencias),
+        joinedload(CV.educaciones),
+        joinedload(CV.habilidades),
+        joinedload(CV.idiomas),
+        joinedload(CV.proyectos)
+    ).filter(CV.id == cv_id, CV.user_id == user_id).first()
     if cv:
         return _decrypt_cv(cv)
     return None
@@ -73,6 +81,12 @@ def update_cv(db: Session, cv_id: int, user_id: int, data: CVUpdate) -> CV | Non
             if field in ("email", "telefono"):
                 value = encrypt(value)
             setattr(cv, field, value)
+
+    if data.proyectos is not None:
+        for proyecto in cv.proyectos:
+            db.delete(proyecto)
+        for proyecto in data.proyectos:
+            db.add(CVProject(cv_id=cv.id, **proyecto.model_dump()))
 
     if data.experiencias is not None:
         for exp in cv.experiencias:

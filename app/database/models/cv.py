@@ -28,6 +28,9 @@ class CV(Base):
     resumen: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     # RELACIONES
+    proyectos: Mapped[list["CVProject"]] = relationship(
+        back_populates="cv", cascade="all, delete-orphan"
+    )
     experiencias: Mapped[list["CVExperience"]] = relationship(
         back_populates="cv", cascade="all, delete-orphan"
     )
@@ -40,6 +43,7 @@ class CV(Base):
     idiomas: Mapped[list["CVLanguage"]] = relationship(
         back_populates="cv", cascade="all, delete-orphan"
     )
+
 
 
 class CVExperience(Base):
@@ -93,3 +97,16 @@ class CVLanguage(Base):
     nivel: Mapped[str] = mapped_column(String(50), nullable=False)
 
     cv: Mapped["CV"] = relationship(back_populates="idiomas")
+
+class CVProject(Base):
+    __tablename__ = "cv_projects"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    cv_id: Mapped[int] = mapped_column(ForeignKey("cvs.id"), nullable=False)
+
+    nombre: Mapped[Optional[str]] = mapped_column(String(150), nullable=True)
+    descripcion: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    tecnologias: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+    url: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+
+    cv: Mapped["CV"] = relationship(back_populates="proyectos")

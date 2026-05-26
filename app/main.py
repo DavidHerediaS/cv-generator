@@ -10,14 +10,15 @@ from app.core.rate_limit import limiter
 from app.database.base import Base
 from app.database.session import engine
 from app.database.models.user import User
-from app.database.models.cv import CV, CVExperience, CVEducation, CVSkill, CVLanguage
+from app.database.models.cv import CV, CVExperience, CVEducation, CVSkill, CVLanguage, CVProject
 from app.api.routes import auth, cv
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title=settings.APP_NAME,
-    debug=settings.DEBUG
+    debug=settings.DEBUG,
+    redirect_slashes=False
 )
 
 app.state.limiter = limiter

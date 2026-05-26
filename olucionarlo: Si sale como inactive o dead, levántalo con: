@@ -1,0 +1,31 @@
+[0;1;32m●[0m postgresql.service - PostgreSQL database server
+     Loaded: loaded (]8;;file://cachyos-x8664/usr/lib/systemd/system/postgresql.service\/usr/lib/systemd/system/postgresql.service]8;;\; [0;1;32menabled[0m; preset: [0;1;38:5:185mdisabled[0m)
+     Active: [0;1;32mactive (running)[0m since Wed 2026-05-20 13:13:51 CEST; 26min ago
+ Invocation: fa6228323c5541169c3b7fb754a32ff2
+       Docs: ]8;;man:postgres(1)\man:postgres(1)]8;;\
+    Process: 1116 ExecStartPre=/usr/bin/postgresql-check-db-dir ${PGROOT}/data (code=exited, status=0/SUCCESS)
+   Main PID: 1120 (postgres)
+      Tasks: 9[0;38:5:245m (limit: 19023)[0m
+     Memory: 66.9M (peak: 69.6M)
+        CPU: 382ms
+     CGroup: /system.slice/postgresql.service
+             ├─[0;38:5:245m1120 /usr/bin/postgres -D /var/lib/postgres/data[0m
+             ├─[0;38:5:245m1131 "postgres: io worker 0"[0m
+             ├─[0;38:5:245m1132 "postgres: io worker 1"[0m
+             ├─[0;38:5:245m1133 "postgres: io worker 2"[0m
+             ├─[0;38:5:245m1134 "postgres: checkpointer "[0m
+             ├─[0;38:5:245m1135 "postgres: background writer "[0m
+             ├─[0;38:5:245m1137 "postgres: walwriter "[0m
+             ├─[0;38:5:245m1138 "postgres: autovacuum launcher "[0m
+             └─[0;38:5:245m1139 "postgres: logical replication launcher "[0m
+
+may 20 13:13:50 cachyos-x8664 systemd[1]: Starting PostgreSQL database server...
+may 20 13:13:50 cachyos-x8664 postgres[1120]: 2026-05-20 13:13:50.989 CEST [1120] LOG:  iniciando PostgreSQL 18.4 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 16.1.1 20260430, 64-bit
+may 20 13:13:50 cachyos-x8664 postgres[1120]: 2026-05-20 13:13:50.990 CEST [1120] LOG:  escuchando en la dirección IPv6 «::1», port 5432
+may 20 13:13:50 cachyos-x8664 postgres[1120]: 2026-05-20 13:13:50.990 CEST [1120] LOG:  escuchando en la dirección IPv4 «127.0.0.1», port 5432
+may 20 13:13:50 cachyos-x8664 postgres[1120]: 2026-05-20 13:13:50.991 CEST [1120] LOG:  escuchando en el socket Unix «/run/postgresql/.s.PGSQL.5432»
+may 20 13:13:50 cachyos-x8664 postgres[1136]: 2026-05-20 13:13:50.998 CEST [1136] LOG:  el sistema de bases de datos fue apagado en 2026-05-19 19:16:25 CEST
+may 20 13:13:51 cachyos-x8664 postgres[1120]: 2026-05-20 13:13:51.002 CEST [1120] LOG:  el sistema de bases de datos está listo para aceptar conexiones
+may 20 13:13:51 cachyos-x8664 systemd[1]: Started PostgreSQL database server.
+may 20 13:18:50 cachyos-x8664 postgres[1134]: 2026-05-20 13:18:50.559 CEST [1134] LOG:  empezando checkpoint: time
+may 20 13:18:50 cachyos-x8664 postgres[1134]: 2026-05-20 13:18:50.999 CEST [1134] LOG:  checkpoint completo: escritos 4 búfers (0.0%); escritos 3 búfers SLRU; 1 archivos WAL añadidos, 0 eliminados, 0 reciclados; write=0.401 s, sync=0.005 s, total=0.441 s; archivos sincronizados=4, más largo=0.002 s, promedio=0.002 s; distancia=32 kB, estimación=32 kB; lsn=0/1C06098, lsn de redo=0/1C06040

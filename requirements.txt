@@ -41,3 +41,5 @@ uvicorn==0.47.0
 weasyprint==68.1
 webencodings==0.5.1
 zopfli==0.4.1
+slowapi==0.1.9
+pydantic-settings>=2.0.0

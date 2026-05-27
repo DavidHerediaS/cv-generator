@@ -5,6 +5,7 @@ from app.api.dependencies import get_db, get_current_user
 from app.core.rate_limit import limiter
 from app.database.schemas.user import UserRegister, UserResponse, TokenResponse
 from app.services.auth_service import register_user, login_user
+from app.database.models.user import User
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 

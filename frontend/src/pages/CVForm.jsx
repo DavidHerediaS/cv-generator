@@ -252,6 +252,7 @@ function CVForm() {
       github: formData.github || null,
       web: formData.web || null,
       foto_url: formData.foto_url || null,
+      foto_base64: formData.foto_base64 || null,
       titulo_profesional: formData.titulo_profesional || null,
       resumen: formData.resumen || null,
       plantilla: formData.plantilla || 'modern',

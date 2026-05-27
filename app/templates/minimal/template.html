@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @page { 
+      size: A4; 
+      margin-top: 16mm;
+      margin-bottom: 16mm;
+      margin-left: 0;
+      margin-right: 0; 
+    }
+    @page :first {
+      margin: 0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 10pt;
+      color: #1a1a1a;
+      background: white;
+      line-height: var(--line-height);
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 0;
+    }
+
+    /* ── CABECERA ── */
+    .header {
+      padding: 18mm 18mm 10mm 18mm;
+      border-bottom: 0.5pt solid #dddddd;
+    }
+
+    .nombre {
+      font-size: 32pt;
+      font-weight: 900;
+      color: #000000;
+      letter-spacing: -1pt;
+      line-height: 1.1;
+      text-transform: uppercase;
+      font-family: Georgia, serif;
+    }
+
+    .separador-nombre {
+      border: none;
+      border-top: 1.5pt solid #000000;
+      margin: 6pt 0;
+      width: 40mm;
+    }
+
+    .titulo {
+      font-size: 10pt;
+      color: #666666;
+      letter-spacing: 3pt;
+      text-transform: uppercase;
+      margin-bottom: 8pt;
+    }
+
+    .contacto-fila {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6pt 16pt;
+      width: 100%;
+    }
+
+    .contacto-item {
+      display: inline-block;
+      font-size: 9pt;
+      color: #555555;
+      white-space: nowrap;
+    }
+
+    /* ── CUERPO DOS COLUMNAS ── */
+    .cuerpo {
+      display: table;
+      width: 100%;
+      padding: 0;
+    }
+
+    .col-izq {
+      display: table-cell;
+      width: 38%;
+      padding: 12mm 8mm 12mm 18mm;
+      vertical-align: top;
+      border-right: 0.5pt solid #eeeeee;
+    }
+
+    .col-der {
+      display: table-cell;
+      width: 62%;
+      padding: 12mm 18mm 12mm 10mm;
+      vertical-align: top;
+    }
+
+    /* ── SECCIONES ── */
+    .cuerpo { 
+      padding: var(--cuerpo-padding);
+    }
+    
+    .seccion {
+      margin-bottom: var(--seccion-margin);
+      break-inside: avoid;
+    }
+
+    .seccion-titulo {
+      font-size: 8pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2pt;
+      color: #999999;
+      margin-bottom: 8pt;
+      break-after: avoid;
+    }
+
+    .seccion-titulo-bullet {
+      display: inline-block;
+      width: 6pt;
+      height: 6pt;
+      background: #000000;
+      margin-right: 6pt;
+      vertical-align: middle;
+    }
+
+    /* ── RESUMEN ── */
+    .resumen-texto {
+      font-size: var(--resumen-size);
+      color: #444444;
+      line-height: var(--line-height);
+    }
+
+    /* ── CONTACTO COLUMNA ── */
+    .contacto-bloque {
+      border: 1pt solid #dddddd;
+      padding: 10pt;
+      margin-bottom: 14pt;
+    }
+
+    .contacto-bloque-titulo {
+      font-size: 8pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2pt;
+      color: #000000;
+      border-bottom: 0.5pt solid #dddddd;
+      padding-bottom: 4pt;
+      margin-bottom: 8pt;
+    }
+
+    .contacto-linea {
+      font-size: 9pt;
+      color: #444444;
+      margin-bottom: 4pt;
+      line-height: 1.4;
+    }
+
+    /* ── EXPERIENCIA ── */
+    .item {
+      margin-bottom: var(--item-margin);
+      break-inside: avoid;
+    }
+
+    .item-titulo {
+      font-size: 11pt;
+      font-weight: bold;
+      color: #000000;
+    }
+
+    .item-subtitulo {
+      font-size: 9.5pt;
+      font-weight: bold;
+      color: #333333;
+      margin-top: 1pt;
+    }
+
+    .item-fecha {
+      font-size: 9pt;
+      color: #888888;
+      margin-top: 1pt;
+      margin-bottom: 3pt;
+    }
+
+    .item-descripcion {
+      font-size: 9.5pt;
+      color: #444444;
+      line-height: 1.5;
+    }
+
+    /* ── HABILIDADES ── */
+    .skill-item {
+      font-size: 9.5pt;
+      color: #333333;
+      padding: 2pt 0;
+      border-bottom: 0.5pt solid #f0f0f0;
+    }
+
+    /* ── FOTO ── */
+    .foto-min {
+      width: 60pt;
+      height: 60pt;
+      object-fit: cover;
+      margin-bottom: 10pt;
+      border-radius: 2pt;
+    }
+
+    /* ── PROYECTOS ── */
+    .tech-tag {
+      font-size: 8pt;
+      color: #666666;
+      border: 0.5pt solid #cccccc;
+      padding: 1pt 4pt;
+      margin-right: 2pt;
+    }
+
+    /* ── IDIOMAS ── */
+    .idioma-row {
+      margin-bottom: 5pt;
+    }
+
+    .idioma-nombre {
+      font-size: 9.5pt;
+      font-weight: bold;
+      color: #000000;
+    }
+
+    .idioma-nivel {
+      font-size: 9pt;
+      color: #888888;
+    }
+  </style>
+</head>
+<body style="
+  --line-height: {{ density.line_height }};
+  --cuerpo-padding: {{ density.cuerpo_padding }};
+  --seccion-margin: {{ density.seccion_margin }};
+  --item-margin: {{ density.item_margin }};
+  --resumen-size: {{ density.resumen_size }};
+">
+<div class="page">
+
+  <!-- CABECERA -->
+  <div class="header">
+    <div class="nombre">{{ cv.nombre }} {{ cv.apellidos }}</div>
+    <hr class="separador-nombre">
+    {% if cv.titulo_profesional %}
+      <div class="titulo">{{ cv.titulo_profesional }}</div>
+    {% endif %}
+    <div class="contacto-fila">
+      <span class="contacto-item">{{ cv.telefono }}</span>
+      <span class="contacto-item">{{ cv.email }}</span>
+      <span class="contacto-item">{{ cv.ciudad }}</span>
+      {% if cv.linkedin %}<span class="contacto-item">{{ cv.linkedin }}</span>{% endif %}
+      {% if cv.github %}<span class="contacto-item">{{ cv.github }}</span>{% endif %}
+      {% if cv.web %}<span class="contacto-item">{{ cv.web }}</span>{% endif %}
+    </div>
+  </div>
+
+  <!-- CUERPO DOS COLUMNAS -->
+  <div class="cuerpo">
+
+    <!-- COLUMNA IZQUIERDA -->
+    <div class="col-izq">
+
+      {% if foto_base64 %}
+      <img src="data:image/jpeg;base64,{{ foto_base64 }}" class="foto-min" alt="Foto">
+      {% elif cv.foto_url %}
+      <img src="{{ cv.foto_url }}" class="foto-min" alt="Foto">
+      {% endif %}
+
+      <!-- SOBRE MÍ -->
+      {% if cv.resumen %}
+      <div class="seccion">
+        <div class="seccion-titulo">
+          <span class="seccion-titulo-bullet"></span>Sobre mí
+        </div>
+        <div class="resumen-texto">{{ cv.resumen }}</div>
+      </div>
+      {% endif %}
+
+      <!-- CONTACTO -->
+      <div class="contacto-bloque">
+        <div class="contacto-bloque-titulo">Contacto</div>
+        <div class="contacto-linea">{{ cv.telefono }}</div>
+        <div class="contacto-linea">{{ cv.email }}</div>
+        <div class="contacto-linea">{{ cv.ciudad }}</div>
+        {% if cv.linkedin %}<div class="contacto-linea">{{ cv.linkedin }}</div>{% endif %}
+        {% if cv.github %}<div class="contacto-linea">{{ cv.github }}</div>{% endif %}
+        {% if cv.web %}<div class="contacto-linea">{{ cv.web }}</div>{% endif %}
+      </div>
+
+      <!-- HABILIDADES -->
+      {% if habilidades %}
+      <div class="seccion">
+        <div class="seccion-titulo">
+          <span class="seccion-titulo-bullet"></span>Habilidades
+        </div>
+        {% for skill in habilidades %}
+        <div class="skill-item">{{ skill.nombre }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- IDIOMAS -->
+      {% if idiomas %}
+      <div class="seccion">
+        <div class="seccion-titulo">
+          <span class="seccion-titulo-bullet"></span>Idiomas
+        </div>
+        {% for lang in idiomas %}
+        <div class="idioma-row">
+          <div class="idioma-nombre">{{ lang.idioma }}</div>
+          <div class="idioma-nivel">{{ lang.nivel }}</div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+    </div>
+
+    <!-- COLUMNA DERECHA -->
+    <div class="col-der">
+
+      <!-- PROYECTOS -->
+      {% if proyectos %}
+      <div class="seccion">
+        <div class="seccion-titulo">
+          <span class="seccion-titulo-bullet"></span>Proyectos
+        </div>
+        {% for proyecto in proyectos %}
+        <div class="item">
+          <div class="item-titulo">
+            {% if proyecto.url %}
+              <a href="{{ proyecto.url }}" style="color: #000000; text-decoration: none;">
+                {{ proyecto.nombre or 'Proyecto' }}
+              </a>
+            {% else %}
+              {{ proyecto.nombre or 'Proyecto' }}
+            {% endif %}
+          </div>
+          {% if proyecto.tecnologias %}
+          <div style="margin: 2pt 0;">
+            {% for tech in proyecto.tecnologias.split(',') %}
+              <span class="tech-tag">{{ tech.strip() }}</span>
+            {% endfor %}
+          </div>
+          {% endif %}
+          {% if proyecto.descripcion %}
+            <div class="item-descripcion">{{ proyecto.descripcion }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- EXPERIENCIA -->
+      {% if experiencias %}
+      <div class="seccion">
+        <div class="seccion-titulo">
+          <span class="seccion-titulo-bullet"></span>Experiencia
+        </div>
+        {% for exp in experiencias %}
+        <div class="item">
+          <div class="item-titulo">{{ exp.cargo }}</div>
+          <div class="item-subtitulo">{{ exp.empresa }}</div>
+          <div class="item-fecha">
+            {{ exp.fecha_inicio.strftime('%m/%Y') }} —
+            {% if exp.fecha_fin %}{{ exp.fecha_fin.strftime('%m/%Y') }}{% else %}Actualidad{% endif %}
+          </div>
+          {% if exp.descripcion %}
+            <div class="item-descripcion">{{ exp.descripcion }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- EDUCACIÓN -->
+      {% if educaciones %}
+      <div class="seccion">
+        <div class="seccion-titulo">
+          <span class="seccion-titulo-bullet"></span>Educación
+        </div>
+        {% for edu in educaciones %}
+        <div class="item">
+          <div class="item-titulo">{{ edu.titulo }}</div>
+          <div class="item-subtitulo">{{ edu.institucion }}</div>
+          <div class="item-fecha">
+            {{ edu.fecha_inicio.strftime('%m/%Y') }}
+            {% if edu.fecha_fin %} — {{ edu.fecha_fin.strftime('%m/%Y') }}{% endif %}
+          </div>
+          {% if edu.descripcion %}
+            <div class="item-descripcion">{{ edu.descripcion }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

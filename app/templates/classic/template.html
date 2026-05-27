@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @page { 
+      size: A4; 
+      margin-top: 16mm;
+      margin-bottom: 16mm;
+      margin-left: 0;
+      margin-right: 0; 
+    }
+    @page :first {
+      margin: 0;
+    }
+    
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 10.5pt;
+      color: #1a1a1a;
+      background: white;
+      line-height: var(--line-height);
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 16mm 18mm;
+    }
+
+    /* ── CABECERA ── */
+    .header {
+      display: table;
+      width: 100%;
+      margin-bottom: 14pt;
+    }
+
+    .header-info {
+      display: table-cell;
+      vertical-align: top;
+    }
+
+    .header-foto {
+      display: table-cell;
+      vertical-align: top;
+      text-align: right;
+      width: 90pt;
+    }
+
+    .header-foto img {
+      width: 80pt;
+      height: 80pt;
+      object-fit: cover;
+      border: 1pt solid #cccccc;
+    }
+
+    .nombre {
+      font-size: 24pt;
+      font-weight: bold;
+      color: #000000;
+      letter-spacing: 0.5pt;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .nombre span {
+      font-weight: normal;
+    }
+
+    .titulo {
+      font-size: 11pt;
+      color: #444444;
+      margin-top: 3pt;
+      font-style: italic;
+    }
+
+    .contacto {
+      margin-top: 6pt;
+      font-size: 9.5pt;
+      color: #333333;
+    }
+
+    .contacto-linea {
+      margin-bottom: 1pt;
+    }
+
+    .separador-header {
+      border: none;
+      border-top: 2pt solid #000000;
+      margin: 10pt 0 0 0;
+    }
+
+    /* ── SECCIONES ── */
+    .cuerpo { 
+      padding: var(--cuerpo-padding);
+    }
+
+    .seccion {
+      margin-bottom: var(--seccion-margin);
+      break-inside: avoid;
+    }
+
+    .seccion-titulo {
+      font-size: 11pt;
+      font-weight: bold;
+      color: #000000;
+      text-transform: uppercase;
+      letter-spacing: 1pt;
+      border-bottom: 1pt solid #000000;
+      padding-bottom: 2pt;
+      margin-bottom: 8pt;
+      break-after: avoid;
+    }
+
+    /* ── RESUMEN ── */
+    .resumen-texto {
+      font-size: var(--resumen-size);
+      color: #333333;
+      line-height: var(--line-height);
+      text-align: justify;
+    }
+
+    /* ── EXPERIENCIA ── */
+    .item {
+      margin-bottom: var(--item-margin);
+      break-inside: avoid;
+    }
+
+    .item-header {
+      display: table;
+      width: 100%;
+    }
+
+    .item-header-left {
+      display: table-cell;
+      vertical-align: top;
+    }
+
+    .item-header-right {
+      display: table-cell;
+      vertical-align: top;
+      text-align: right;
+      white-space: nowrap;
+      width: 1%;
+      font-size: 9pt;
+      color: #555555;
+      font-style: italic;
+    }
+
+    .item-titulo {
+      font-size: 10.5pt;
+      font-weight: bold;
+      color: #000000;
+    }
+
+    .item-subtitulo {
+      font-size: 10pt;
+      color: #333333;
+      font-style: italic;
+      margin-top: 1pt;
+    }
+
+    .item-descripcion {
+      font-size: 9.5pt;
+      color: #333333;
+      margin-top: 3pt;
+      line-height: 1.5;
+    }
+
+    /* ── HABILIDADES ── */
+    .habilidades-lista {
+      display: table;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .habilidades-fila {
+      display: table-row;
+    }
+
+    .habilidad-celda {
+      display: table-cell;
+      width: 33%;
+      padding: 1pt 0;
+      font-size: 10pt;
+      color: #333333;
+    }
+
+    .bullet {
+      color: #000000;
+      margin-right: 4pt;
+    }
+
+    /* ── EDUCACIÓN ── */
+    .edu-tabla {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .edu-tabla td {
+      vertical-align: top;
+      padding: 2pt 8pt 2pt 0;
+      width: 33%;
+      font-size: 10pt;
+    }
+
+    .edu-institucion {
+      font-size: 9pt;
+      color: #555555;
+      text-transform: uppercase;
+      letter-spacing: 0.3pt;
+    }
+
+    .edu-titulo {
+      font-weight: bold;
+      color: #000000;
+      margin-top: 1pt;
+    }
+
+    .edu-fecha {
+      font-size: 9pt;
+      color: #555555;
+      font-style: italic;
+      margin-top: 1pt;
+    }
+
+    /* ── IDIOMAS ── */
+    .idiomas-tabla {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .idiomas-tabla td {
+      padding: 2pt 0;
+      font-size: 10pt;
+      width: 33%;
+      vertical-align: top;
+    }
+
+    .idioma-nombre {
+      font-weight: bold;
+      color: #000000;
+    }
+
+    .idioma-nivel-barra {
+      display: inline-block;
+      width: 60pt;
+      height: 5pt;
+      background: #dddddd;
+      vertical-align: middle;
+      margin-left: 6pt;
+      position: relative;
+    }
+
+    .idioma-nivel-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: #000000;
+    }
+
+    /* ── PROYECTOS ── */
+    .tech-tag {
+      font-size: 8.5pt;
+      color: #555555;
+      border: 0.5pt solid #999999;
+      padding: 1pt 5pt;
+      margin-right: 3pt;
+    }
+  </style>
+</head>
+<body style="
+  --line-height: {{ density.line_height }};
+  --cuerpo-padding: {{ density.cuerpo_padding }};
+  --seccion-margin: {{ density.seccion_margin }};
+  --item-margin: {{ density.item_margin }};
+  --resumen-size: {{ density.resumen_size }};
+">
+<div class="page">
+
+  <!-- CABECERA -->
+  <div class="header">
+    <div class="header-info">
+      <div class="nombre">{{ cv.nombre }} <span>{{ cv.apellidos }}</span></div>
+      {% if cv.titulo_profesional %}
+        <div class="titulo">{{ cv.titulo_profesional }}</div>
+      {% endif %}
+      <div class="contacto">
+        {% if cv.telefono %}
+          <div class="contacto-linea">{{ cv.telefono }}</div>
+        {% endif %}
+        {% if cv.email %}
+          <div class="contacto-linea">{{ cv.email }}</div>
+        {% endif %}
+        {% if cv.ciudad %}
+          <div class="contacto-linea">{{ cv.ciudad }}</div>
+        {% endif %}
+        {% if cv.linkedin %}
+          <div class="contacto-linea">{{ cv.linkedin }}</div>
+        {% endif %}
+        {% if cv.github %}
+          <div class="contacto-linea">{{ cv.github }}</div>
+        {% endif %}
+        {% if cv.web %}
+          <div class="contacto-linea">{{ cv.web }}</div>
+        {% endif %}
+      </div>
+    </div>
+    {% if foto_base64 %}
+    <div class="header-foto">
+      <img src="data:image/jpeg;base64,{{ foto_base64 }}" alt="Foto">
+    </div>
+    {% elif cv.foto_url %}
+    <div class="header-foto">
+      <img src="{{ cv.foto_url }}" alt="Foto">
+    </div>
+    {% endif %}
+  </div>
+
+  <hr class="separador-header">
+
+  <!-- RESUMEN -->
+  {% if cv.resumen %}
+  <div class="seccion" style="margin-top: 12pt;">
+    <div class="seccion-titulo">Perfil</div>
+    <div class="resumen-texto">{{ cv.resumen }}</div>
+  </div>
+  {% endif %}
+
+  <!-- HABILIDADES -->
+  {% if habilidades %}
+  <div class="seccion">
+    <div class="seccion-titulo">Habilidades</div>
+    <div class="habilidades-lista">
+      {% set ns = namespace(count=0) %}
+      {% for skill in habilidades %}
+        {% if ns.count % 3 == 0 %}<div class="habilidades-fila">{% endif %}
+        <div class="habilidad-celda">
+          <span class="bullet">•</span>{{ skill.nombre }}
+        </div>
+        {% set ns.count = ns.count + 1 %}
+        {% if ns.count % 3 == 0 %}</div>{% endif %}
+      {% endfor %}
+      {% if ns.count % 3 != 0 %}</div>{% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- PROYECTOS -->
+  {% if proyectos %}
+  <div class="seccion">
+    <div class="seccion-titulo">Proyectos</div>
+    {% for proyecto in proyectos %}
+    <div class="item">
+      <div class="item-header">
+        <div class="item-header-left">
+          <div class="item-titulo">
+            {% if proyecto.url %}
+              <a href="{{ proyecto.url }}" style="color: #000000; text-decoration: none;">
+                {{ proyecto.nombre or 'Proyecto' }}
+              </a>
+            {% else %}
+              {{ proyecto.nombre or 'Proyecto' }}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% if proyecto.tecnologias %}
+      <div style="margin-top: 2pt;">
+        {% for tech in proyecto.tecnologias.split(',') %}
+          <span class="tech-tag">{{ tech.strip() }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% if proyecto.descripcion %}
+        <div class="item-descripcion">{{ proyecto.descripcion }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- EXPERIENCIA -->
+  {% if experiencias %}
+  <div class="seccion">
+    <div class="seccion-titulo">Experiencia profesional</div>
+    {% for exp in experiencias %}
+    <div class="item">
+      <div class="item-header">
+        <div class="item-header-left">
+          <div class="item-subtitulo">{{ exp.cargo }}</div>
+          <div class="item-titulo">{{ exp.empresa }} | {{ exp.cargo }}</div>
+        </div>
+        <div class="item-header-right">
+          {{ exp.fecha_inicio.strftime('%m/%Y') }} —
+          {% if exp.fecha_fin %}{{ exp.fecha_fin.strftime('%m/%Y') }}{% else %}Actualidad{% endif %}
+        </div>
+      </div>
+      {% if exp.descripcion %}
+        <div class="item-descripcion">{{ exp.descripcion }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- EDUCACIÓN -->
+  {% if educaciones %}
+  <div class="seccion">
+    <div class="seccion-titulo">Educación</div>
+    <table class="edu-tabla">
+      <tr>
+        {% for edu in educaciones %}
+        <td>
+          <div class="edu-institucion">{{ edu.institucion }}</div>
+          <div class="edu-titulo">{{ edu.titulo }}</div>
+          <div class="edu-fecha">
+            {{ edu.fecha_inicio.strftime('%m/%Y') }}
+            {% if edu.fecha_fin %} — {{ edu.fecha_fin.strftime('%m/%Y') }}{% endif %}
+          </div>
+        </td>
+        {% endfor %}
+      </tr>
+    </table>
+  </div>
+  {% endif %}
+
+  <!-- IDIOMAS -->
+  {% if idiomas %}
+  <div class="seccion">
+    <div class="seccion-titulo">Idiomas</div>
+    <table class="idiomas-tabla">
+      <tr>
+        {% for lang in idiomas %}
+        <td>
+            <span class="idioma-nombre">{{ lang.idioma }}</span>
+            {% set nivel_map = {
+                'Nativo': 100,
+                'C2': 95,
+                'C1': 80,
+                'B2': 65,
+                'B1': 50,
+                'A2': 35,
+                'A1': 20
+            } %}
+
+            {% set pct = nivel_map.get(lang.nivel, 50) %}
+
+            <span class="idioma-nivel-barra">
+            <span
+                class="idioma-nivel-fill"
+                style="width: {{ pct }}%;"
+            ></span>
+            </span>
+          </span>
+          <span style="font-size: 9pt; color: #555555; margin-left: 4pt;">{{ lang.nivel }}</span>
+        </td>
+        {% endfor %}
+      </tr>
+    </table>
+  </div>
+  {% endif %}
+
+</div>
+</body>
+</html>

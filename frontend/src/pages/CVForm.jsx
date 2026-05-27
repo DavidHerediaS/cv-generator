@@ -22,6 +22,8 @@ function CVForm() {
     foto_url: '',
     titulo_profesional: '',
     resumen: '',
+    plantilla: 'modern',
+    foto_base64: null,
     proyectos: [],
     experiencias: [],
     educaciones: [],
@@ -40,17 +42,44 @@ function CVForm() {
       const response = await getCV(id)
       const cv = response.data
       setFormData({
-        ...cv,
+        nombre: cv.nombre || '',
+        apellidos: cv.apellidos || '',
+        email: cv.email || '',
+        telefono: cv.telefono || '',
+        ciudad: cv.ciudad || '',
         linkedin: cv.linkedin || '',
         github: cv.github || '',
         web: cv.web || '',
         foto_url: cv.foto_url || '',
         titulo_profesional: cv.titulo_profesional || '',
         resumen: cv.resumen || '',
+        plantilla: cv.plantilla || 'modern',
+        foto_base64: null,
+        proyectos: (cv.proyectos || []).map(p => ({
+          nombre: p.nombre || '',
+          descripcion: p.descripcion || '',
+          tecnologias: p.tecnologias || '',
+          url: p.url || ''
+        })),
+        experiencias: (cv.experiencias || []).map(e => ({
+          empresa: e.empresa || '',
+          cargo: e.cargo || '',
+          fecha_inicio: e.fecha_inicio || '',
+          fecha_fin: e.fecha_fin || '',
+          descripcion: e.descripcion || ''
+        })),
+        educaciones: (cv.educaciones || []).map(e => ({
+          institucion: e.institucion || '',
+          titulo: e.titulo || '',
+          fecha_inicio: e.fecha_inicio || '',
+          fecha_fin: e.fecha_fin || '',
+          descripcion: e.descripcion || ''
+        })),
+        habilidades: (cv.habilidades || []).map(h => ({ nombre: h.nombre || '' })),
+        idiomas: (cv.idiomas || []).map(i => ({ idioma: i.idioma || '', nivel: i.nivel || '' }))
       })
     } catch (err) {
-        const detail = err.response?.data?.detail
-        setError(typeof detail === 'string' ? detail : 'Error al guardar el CV. Revisa los campos obligatorios.')
+      setError('Error al cargar el CV')
     }
   }
 
@@ -58,30 +87,41 @@ function CVForm() {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
+  const handleFotoChange = (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+    if (file.size > 2 * 1024 * 1024) {
+      setError('La imagen no puede superar 2MB')
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = () => {
+      const base64 = reader.result.split(',')[1]
+      setFormData(prev => ({ ...prev, foto_base64: base64 }))
+    }
+    reader.readAsDataURL(file)
+  }
 
   // --- PROYECTOS ---
-const addProyecto = () => {
-  setFormData(prev => ({
-    ...prev,
-    proyectos: [...prev.proyectos, {
-      nombre: '', descripcion: '', tecnologias: '', url: ''
-    }]
-  }))
-}
+  const addProyecto = () => {
+    setFormData(prev => ({
+      ...prev,
+      proyectos: [...prev.proyectos, { nombre: '', descripcion: '', tecnologias: '', url: '' }]
+    }))
+  }
 
-const updateProyecto = (index, field, value) => {
-  const updated = [...formData.proyectos]
-  updated[index][field] = value
-  setFormData(prev => ({ ...prev, proyectos: updated }))
-}
+  const updateProyecto = (index, field, value) => {
+    const updated = [...formData.proyectos]
+    updated[index][field] = value
+    setFormData(prev => ({ ...prev, proyectos: updated }))
+  }
 
-const removeProyecto = (index) => {
-  setFormData(prev => ({
-    ...prev,
-    proyectos: prev.proyectos.filter((_, i) => i !== index)
-  }))
-}
-
+  const removeProyecto = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      proyectos: prev.proyectos.filter((_, i) => i !== index)
+    }))
+  }
 
   // --- EXPERIENCIAS ---
   const addExperiencia = () => {
@@ -177,32 +217,59 @@ const removeProyecto = (index) => {
     setError('')
     setLoading(true)
 
-    const cleanFecha = (val) => val === '' ? null : val
+    const cleanFecha = (val) => (!val || val === '') ? null : val
+
+    const cleanExperiencia = (exp) => ({
+      empresa: exp.empresa,
+      cargo: exp.cargo,
+      fecha_inicio: exp.fecha_inicio,
+      fecha_fin: cleanFecha(exp.fecha_fin),
+      descripcion: exp.descripcion || null
+    })
+
+    const cleanEducacion = (edu) => ({
+      institucion: edu.institucion,
+      titulo: edu.titulo,
+      fecha_inicio: edu.fecha_inicio,
+      fecha_fin: cleanFecha(edu.fecha_fin),
+      descripcion: edu.descripcion || null
+    })
+
+    const cleanProyecto = (p) => ({
+      nombre: p.nombre || null,
+      descripcion: p.descripcion || null,
+      tecnologias: p.tecnologias || null,
+      url: p.url || null
+    })
 
     const payload = {
-    ...formData,
-    linkedin: formData.linkedin || null,
-    github: formData.github || null,
-    web: formData.web || null,
-    foto_url: formData.foto_url || null,
-    titulo_profesional: formData.titulo_profesional || null,
-    resumen: formData.resumen || null,
-    proyectos: formData.proyectos.filter(p => p.nombre || p.descripcion || p.url)
-    .map(p => ({
-    ...p,
-    nombre: p.nombre || null,
-    descripcion: p.descripcion || null,
-    tecnologias: p.tecnologias || null,
-    url: p.url || null
-    })),
-    experiencias: formData.experiencias
+      nombre: formData.nombre,
+      apellidos: formData.apellidos,
+      email: formData.email,
+      telefono: formData.telefono,
+      ciudad: formData.ciudad,
+      linkedin: formData.linkedin || null,
+      github: formData.github || null,
+      web: formData.web || null,
+      foto_url: formData.foto_url || null,
+      titulo_profesional: formData.titulo_profesional || null,
+      resumen: formData.resumen || null,
+      plantilla: formData.plantilla || 'modern',
+      proyectos: formData.proyectos
+        .filter(p => p.nombre || p.descripcion || p.url)
+        .map(cleanProyecto),
+      experiencias: formData.experiencias
         .filter(e => e.empresa && e.cargo && e.fecha_inicio)
-        .map(e => ({ ...e, fecha_fin: cleanFecha(e.fecha_fin), descripcion: e.descripcion || null })),
-    educaciones: formData.educaciones
+        .map(cleanExperiencia),
+      educaciones: formData.educaciones
         .filter(e => e.institucion && e.titulo && e.fecha_inicio)
-        .map(e => ({ ...e, fecha_fin: cleanFecha(e.fecha_fin), descripcion: e.descripcion || null })),
-    habilidades: formData.habilidades.filter(h => h.nombre),
-    idiomas: formData.idiomas.filter(i => i.idioma && i.nivel)
+        .map(cleanEducacion),
+      habilidades: formData.habilidades
+        .filter(h => h.nombre)
+        .map(h => ({ nombre: h.nombre })),
+      idiomas: formData.idiomas
+        .filter(i => i.idioma && i.nivel)
+        .map(i => ({ idioma: i.idioma, nivel: i.nivel }))
     }
 
     try {
@@ -213,7 +280,14 @@ const removeProyecto = (index) => {
       }
       navigate('/dashboard')
     } catch (err) {
-      setError(err.response?.data?.detail || 'Error al guardar el CV')
+      const detail = err.response?.data?.detail
+      if (Array.isArray(detail)) {
+        setError('Error de validación: ' + detail.map(d => d.msg).join(', '))
+      } else if (typeof detail === 'string') {
+        setError(detail)
+      } else {
+        setError('Error al guardar el CV')
+      }
     } finally {
       setLoading(false)
     }
@@ -236,6 +310,61 @@ const removeProyecto = (index) => {
         {error && <div style={styles.error}>{error}</div>}
 
         <form onSubmit={handleSubmit}>
+
+          {/* PLANTILLA E IMAGEN */}
+          <div style={styles.section}>
+            <h3 style={styles.sectionTitle}>Estilo del currículum</h3>
+            <div style={styles.grid2}>
+              <div style={styles.field}>
+                <label style={styles.label}>Selecciona el estilo</label>
+                <div style={styles.plantillasGrid}>
+                  {[
+                    { id: 'modern', nombre: 'Moderno', desc: 'Cabecera azul, diseño actual' },
+                    { id: 'classic', nombre: 'Clásico', desc: 'Tipografía serif, estilo formal' },
+                    { id: 'minimal', nombre: 'Minimalista', desc: 'Dos columnas, espacios blancos' }
+                  ].map(p => (
+                    <div
+                      key={p.id}
+                      onClick={() => handleField('plantilla', p.id)}
+                      style={{
+                        ...styles.plantillaCard,
+                        ...(formData.plantilla === p.id ? styles.plantillaCardActiva : {})
+                      }}
+                    >
+                      <div style={styles.plantillaNombre}>{p.nombre}</div>
+                      <div style={styles.plantillaDesc}>{p.desc}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div style={styles.field}>
+                <label style={styles.label}>Foto de perfil (opcional)</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFotoChange}
+                  style={styles.inputFile}
+                />
+                {formData.foto_base64 && (
+                  <div style={styles.fotoPreview}>
+                    <img
+                      src={`data:image/jpeg;base64,${formData.foto_base64}`}
+                      alt="Preview"
+                      style={styles.fotoPreviewImg}
+                    />
+                    <button
+                      type="button"
+                      style={styles.buttonRemove}
+                      onClick={() => handleField('foto_base64', null)}
+                    >
+                      Quitar foto
+                    </button>
+                  </div>
+                )}
+                <p style={styles.inputHint}>JPG o PNG, máximo 2MB</p>
+              </div>
+            </div>
+          </div>
 
           {/* DATOS PERSONALES */}
           <div style={styles.section}>
@@ -312,53 +441,53 @@ const removeProyecto = (index) => {
           </div>
 
           {/* PROYECTOS */}
-<div style={styles.section}>
-  <div style={styles.sectionHeader}>
-    <h3 style={styles.sectionTitle}>Proyectos destacados</h3>
-    <button type="button" style={styles.buttonAdd} onClick={addProyecto}>
-      + Añadir
-    </button>
-  </div>
-  <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '12px', marginTop: '-8px' }}>
-    Opcional — proyectos personales, académicos o profesionales que quieras destacar
-  </p>
-  {formData.proyectos.map((proyecto, i) => (
-    <div key={i} style={styles.itemCard}>
-      <div style={styles.itemCardHeader}>
-        <span style={styles.itemCardTitle}>Proyecto {i + 1}</span>
-        <button type="button" style={styles.buttonRemove}
-          onClick={() => removeProyecto(i)}>✕</button>
-      </div>
-      <div style={styles.grid2}>
-        <div style={styles.field}>
-          <label style={styles.label}>Nombre del proyecto</label>
-          <input style={styles.input} value={proyecto.nombre}
-            onChange={e => updateProyecto(i, 'nombre', e.target.value)}
-            placeholder="Ej: CV Generator" />
-        </div>
-        <div style={styles.field}>
-          <label style={styles.label}>URL (opcional)</label>
-          <input style={styles.input} value={proyecto.url}
-            onChange={e => updateProyecto(i, 'url', e.target.value)}
-            placeholder="https://github.com/..." />
-        </div>
-        <div style={styles.field}>
-          <label style={styles.label}>Tecnologías (separadas por comas)</label>
-          <input style={styles.input} value={proyecto.tecnologias}
-            onChange={e => updateProyecto(i, 'tecnologias', e.target.value)}
-            placeholder="Ej: Python, FastAPI, React" />
-        </div>
-        <div style={{ ...styles.field, gridColumn: 'span 2' }}>
-          <label style={styles.label}>Descripción (opcional)</label>
-          <textarea style={styles.textarea} value={proyecto.descripcion}
-            onChange={e => updateProyecto(i, 'descripcion', e.target.value)}
-            placeholder="Breve descripción del proyecto..."
-            rows={3} />
-        </div>
-      </div>
-    </div>
-  ))}
-</div>
+          <div style={styles.section}>
+            <div style={styles.sectionHeader}>
+              <h3 style={styles.sectionTitle}>Proyectos destacados</h3>
+              <button type="button" style={styles.buttonAdd} onClick={addProyecto}>
+                + Añadir
+              </button>
+            </div>
+            <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '12px', marginTop: '-8px' }}>
+              Opcional — proyectos personales, académicos o profesionales que quieras destacar
+            </p>
+            {formData.proyectos.map((proyecto, i) => (
+              <div key={i} style={styles.itemCard}>
+                <div style={styles.itemCardHeader}>
+                  <span style={styles.itemCardTitle}>Proyecto {i + 1}</span>
+                  <button type="button" style={styles.buttonRemove}
+                    onClick={() => removeProyecto(i)}>✕</button>
+                </div>
+                <div style={styles.grid2}>
+                  <div style={styles.field}>
+                    <label style={styles.label}>Nombre del proyecto</label>
+                    <input style={styles.input} value={proyecto.nombre}
+                      onChange={e => updateProyecto(i, 'nombre', e.target.value)}
+                      placeholder="Ej: CV Generator" />
+                  </div>
+                  <div style={styles.field}>
+                    <label style={styles.label}>URL (opcional)</label>
+                    <input style={styles.input} value={proyecto.url}
+                      onChange={e => updateProyecto(i, 'url', e.target.value)}
+                      placeholder="https://github.com/..." />
+                  </div>
+                  <div style={styles.field}>
+                    <label style={styles.label}>Tecnologías (separadas por comas)</label>
+                    <input style={styles.input} value={proyecto.tecnologias}
+                      onChange={e => updateProyecto(i, 'tecnologias', e.target.value)}
+                      placeholder="Ej: Python, FastAPI, React" />
+                  </div>
+                  <div style={{ ...styles.field, gridColumn: 'span 2' }}>
+                    <label style={styles.label}>Descripción (opcional)</label>
+                    <textarea style={styles.textarea} value={proyecto.descripcion}
+                      onChange={e => updateProyecto(i, 'descripcion', e.target.value)}
+                      placeholder="Breve descripción del proyecto..."
+                      rows={3} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
 
           {/* EXPERIENCIA */}
           <div style={styles.section}>
@@ -725,6 +854,57 @@ const styles = {
     padding: '12px 24px',
     fontSize: '15px',
     cursor: 'not-allowed'
+  },
+  plantillasGrid: {
+    display: 'flex',
+    gap: '10px',
+    marginTop: '6px'
+  },
+  plantillaCard: {
+    flex: 1,
+    border: '2px solid #e2e8f0',
+    borderRadius: '8px',
+    padding: '12px',
+    cursor: 'pointer',
+    textAlign: 'center'
+  },
+  plantillaCardActiva: {
+    border: '2px solid #2563eb',
+    background: '#eff6ff'
+  },
+  plantillaNombre: {
+    fontSize: '14px',
+    fontWeight: 'bold',
+    color: '#1e3a5f',
+    marginBottom: '4px'
+  },
+  plantillaDesc: {
+    fontSize: '11px',
+    color: '#64748b'
+  },
+  inputFile: {
+    padding: '8px 0',
+    fontSize: '14px',
+    cursor: 'pointer',
+    width: '100%'
+  },
+  fotoPreview: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    marginTop: '8px'
+  },
+  fotoPreviewImg: {
+    width: '60px',
+    height: '60px',
+    objectFit: 'cover',
+    borderRadius: '50%',
+    border: '2px solid #e2e8f0'
+  },
+  inputHint: {
+    fontSize: '12px',
+    color: '#94a3b8',
+    marginTop: '4px'
   }
 }
 

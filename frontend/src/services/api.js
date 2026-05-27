@@ -81,15 +81,17 @@ export const createCV = (data) =>
 
 
 export const updateCV = (id, data) =>
-    api.put(`/cv/${id}`)
+    api.put(`/cv/${id}`, data)
 
 
 export const deleteCV = (id) =>
     api.delete(`/cv/${id}`)
 
 
-export const downloadPDF = async (id) => {
-    const response = await api.get(`/cv/${id}/pdf`,{
+export const downloadPDF = async (id, fotoBase64 = null) => {
+    const response = await api.post(`/cv/${id}/pdf`,{
+        foto_base64: fotoBase64
+    }, {
         responseType: 'blob'
     })
     const url = window.URL.createObjectURL(new Blob([response.data]))

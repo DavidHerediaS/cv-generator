@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
-from app.api.dependencies import get_db
+from app.api.dependencies import get_db, get_current_user
 from app.core.rate_limit import limiter
 from app.database.schemas.user import UserRegister, UserResponse, TokenResponse
 from app.services.auth_service import register_user, login_user
@@ -33,3 +33,9 @@ def login(request: Request, data: UserRegister, db: Session = Depends(get_db)):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=str(e)
         )
+
+
+@router.post("/refresh", response_model=TokenResponse)
+def refresh(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    token = create_access_token(subject=str(current_user.id))
+    return TokenResponse(access_token=token)

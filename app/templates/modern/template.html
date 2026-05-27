@@ -14,6 +14,7 @@
     @page :first {
       margin: 0;
     }
+    
     * { 
       margin: 0; 
       padding: 0; 
@@ -258,7 +259,11 @@
 
   <div class="cuerpo clearfix">
 
-    {% if cv.foto_url %}
+    {% if foto_base64 %}
+    <div class="foto-contenedor">
+      <img src="data:image/jpeg;base64,{{ foto_base64 }}" alt="Foto de perfil">
+    </div>
+    {% elif cv.foto_url %}
     <div class="foto-contenedor">
       <img src="{{ cv.foto_url }}" alt="Foto de perfil">
     </div>

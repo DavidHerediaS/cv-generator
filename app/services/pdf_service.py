@@ -79,9 +79,13 @@ def _get_density_styles(lines: int) -> dict:
         }
 
 
-def render_cv_html(cv: CV) -> str:
+def render_cv_html(cv: CV, foto_base64: str | None = None) -> str:
+    plantilla = getattr(cv, 'plantilla', 'modern')
+    if plantilla not in ('modern', 'classic', 'minimal'):
+        plantilla = 'modern'
+
     env = Environment(
-        loader=FileSystemLoader(str(TEMPLATES_DIR / "modern")),
+        loader=FileSystemLoader(str(TEMPLATES_DIR / plantilla)),
         autoescape=True
     )
     template = env.get_template("template.html")
@@ -102,12 +106,13 @@ def render_cv_html(cv: CV) -> str:
         educaciones=educaciones,
         habilidades=habilidades,
         idiomas=idiomas,
-        density=density
+        density=density,
+        foto_base64=foto_base64
     )
 
 
-def generate_pdf(cv: CV) -> bytes:
-    html_content = render_cv_html(cv)
+def generate_pdf(cv: CV, foto_base64: str | None = None) -> bytes:
+    html_content = render_cv_html(cv, foto_base64)
 
     with tempfile.NamedTemporaryFile(
         suffix=".pdf",

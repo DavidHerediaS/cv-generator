@@ -11,12 +11,13 @@ class CV(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    plantilla: Mapped[str] = mapped_column(String(20), nullable=False, server_default="modern")
 
     # DATOS PERSONALES
     nombre: Mapped[str] = mapped_column(String(100), nullable=False)
     apellidos: Mapped[str] = mapped_column(String(100), nullable=False)
     email: Mapped[str] = mapped_column(String(255), nullable=False)
-    telefono: Mapped[str] = mapped_column(String(100), nullable=False)
+    telefono: Mapped[str] = mapped_column(String(255), nullable=False)
     ciudad: Mapped[str] = mapped_column(String(100), nullable=False)
     linkedin: Mapped[Optional[str]] = mapped_column(String(255), nullable=False)
     github: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)

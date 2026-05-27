@@ -21,7 +21,7 @@ def _decrypt_cv(cv: CV) -> CV:
 
 
 def create_cv(db: Session, user_id: int, data: CVCreate) -> CV:
-    fields = data.model_dump(exclude={"experiencias", "educaciones", "habilidades", "idiomas", "proyectos"})
+    fields = data.model_dump(exclude={"experiencias", "educaciones", "habilidades", "idiomas", "proyectos", "foto_base64"})
     fields = _encrypt_cv_fields(fields)
 
     cv = CV(user_id=user_id, **fields)
@@ -73,7 +73,7 @@ def update_cv(db: Session, cv_id: int, user_id: int, data: CVUpdate) -> CV | Non
     simple_fields = [
         "nombre", "apellidos", "email", "telefono", "ciudad",
         "linkedin", "github", "web", "foto_url",
-        "titulo_profesional", "resumen"
+        "titulo_profesional", "resumen", "plantilla"
     ]
     for field in simple_fields:
         value = getattr(data, field)

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from datetime import date
 
 
@@ -9,6 +9,15 @@ class ExperienceBase(BaseModel):
     fecha_inicio: date
     fecha_fin: date | None = None
     descripcion: str | None = None
+
+    @field_validator('fecha_inicio', 'fecha_fin', mode='before')
+    @classmethod
+    def parse_fecha(cls, v):
+        if v is None or v == '':
+            return None
+        if isinstance(v, str):
+            return v[:10]  # toma solo YYYY-MM-DD
+        return v
 
 class ExperienceCreate(ExperienceBase):
     pass
@@ -25,6 +34,15 @@ class EducationBase(BaseModel):
     fecha_inicio: date
     fecha_fin: date | None = None
     descripcion: str | None = None
+
+    @field_validator('fecha_inicio', 'fecha_fin', mode='before')
+    @classmethod
+    def parse_fecha(cls, v):
+        if v is None or v == '':
+            return None
+        if isinstance(v, str):
+            return v[:10]
+        return v
 
 class EducationCreate(EducationBase):
     pass
@@ -93,6 +111,8 @@ class CVCreate(BaseModel):
     habilidades: list[SkillCreate] = []
     idiomas: list[LanguageCreate] = []
 
+    plantilla: str = "modern"
+    foto_base64: str | None = None
 
 class CVUpdate(BaseModel):
     nombre: str | None = None
@@ -111,6 +131,9 @@ class CVUpdate(BaseModel):
     educaciones: list[EducationCreate] | None = None
     habilidades: list[SkillCreate] | None = None
     idiomas: list[LanguageCreate] | None = None
+
+    plantilla: str | None = None
+    foto_base64: str | None = None
 
 
 class CVResponse(BaseModel):
@@ -132,5 +155,6 @@ class CVResponse(BaseModel):
     educaciones: list[EducationResponse] = []
     habilidades: list[SkillResponse] = []
     idiomas: list[LanguageResponse] = []
-
+    
+    plantilla: str = "modern"
     model_config = {"from_attributes": True}
